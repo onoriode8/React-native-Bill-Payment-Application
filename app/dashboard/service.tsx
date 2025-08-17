@@ -2,39 +2,59 @@ import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { StyleSheet, Text, View } from 'react-native';
-
+import { Link } from 'expo-router';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 
 
 export default function ServiceModel () {
     return (
         <View style={style.contWrapper}>
-            <Text>Quick Service</Text>
+            <Text style={{color: "black", marginTop: 10, marginLeft: 10,}}>Quick Service</Text>
             <View style={style.viewWrapper}>
-                <View style={style.wrapper}>
-                    <MaterialIcons name="signal-cellular-alt" size={24} color="purple" />
-                    <Text>Airtime</Text>
-                </View>
+                <Link href="/airtime">
+                    <View style={style.wrapper}>
+                        <View style={style.iconWrapper}>
+                            <MaterialIcons name="signal-cellular-alt" size={24} color="#fff" />
+                        </View>
+                        <Text style={{color:"black"}}>Airtime</Text>
+                    </View>
+                </Link>
 
-                <View style={style.wrapper}>
-                    <FontAwesome name="mobile-phone" size={24} color="purple" />
-                    <Text>Data</Text>
-                </View>
+                <Link href="/">
+                    <View style={style.wrapper}>
+                        <View style={style.specialWrapper}>
+                            <FontAwesome name="mobile-phone" size={24} color="#fff" />
+                        </View>
+                        <Text style={{color:"black"}}>Data</Text>
+                    </View>
+                </Link>
 
-                <View style={style.wrapper}>
-                    <Feather name="tv" size={24} color="purple" />
-                    <Text>TV</Text>
-                </View>
+                <Link href="/">
+                    <View style={style.wrapper}>
+                        <View style={{backgroundColor: "purple", borderRadius: 20, padding: 5, paddingBottom: 7}}>
+                            <Feather name="tv" size={21} color="#fff" />
+                        </View>
+                        <Text style={{color:"black"}}>TV</Text>
+                    </View>
+                </Link>
 
-                <View style={style.wrapper}>
-                    <MaterialCommunityIcons name="lightbulb-variant-outline" size={24} color="purple" />
-                    <Text>Electricity</Text>
-                </View>
-
-                <View style={style.wrapper}>
-                    <FontAwesome name="bullhorn" size={20} color="purple" />
-                    <Text>Invitation</Text>
-                </View>
+                <Link href="/">
+                    <View style={style.wrapper}>
+                        <View style={style.iconWrapper}>
+                            <MaterialCommunityIcons name="lightbulb-variant-outline" size={24} color="#fff" />
+                        </View>
+                        <Text style={{color:"black"}}>Electricity</Text>
+                    </View>
+                </Link>
+                
+                <Link href="/">
+                    <View style={style.wrapper}>
+                        <View style={{backgroundColor: "purple", borderRadius: 20, padding: 5}}>
+                            <FontAwesome name="bullhorn" size={20} color="#fff" />
+                        </View>
+                        <Text style={{color:"black"}}>Invitation</Text>
+                    </View>
+                </Link>
             </View>
         </View>
     )
@@ -42,18 +62,39 @@ export default function ServiceModel () {
 
 const style = StyleSheet.create({
     contWrapper: {
-        marginTop: 30
+        marginTop: 30,
+        paddingBottom: 15,
+        borderRadius: 15,
+        // backgroundColor: "purple"
+        elevation: 5, // Android shadow
+        shadowColor: "#000", //ios shadow
+        shadowOpacity: 0.2,
+        backgroundColor: "#fff",
+        shadowOffset: { width: 0, height: 3 }
     },
     viewWrapper: {
-        marginTop: 45,
+        marginTop: Platform.OS === "ios" ? 45 : 35,
         flexDirection: "row",
         justifyContent: "space-around"
     },
     wrapper: {
-        borderWidth: 0.3,
+        // borderWidth: 0.3,
         borderColor: "purple",
         padding: 8,
-        borderRadius: 10,
-        alignItems: "center"
+        borderRadius: Platform.OS === "ios" ? 10 : 12,
+        alignItems: "center",
+        backgroundColor: "#fff", //"rgba(154, 205, 236, 0.2)"
+
+        elevation: 5, // Android shadow
+        shadowColor: "#000", //ios shadow
+        shadowOpacity: 0.2,
+        // backgroundColor: "#fff",
+        shadowOffset: { width: 0, height: 3 }
+    },
+    iconWrapper : {backgroundColor: "purple", borderRadius: 20, padding: 5},
+    specialWrapper: {
+        backgroundColor: "purple", 
+        borderRadius: 20, paddingTop: 5, 
+        paddingBottom: 5, paddingRight: 12,paddingLeft: 12
     }
 })

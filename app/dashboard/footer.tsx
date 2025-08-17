@@ -1,10 +1,14 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { SafeAreaView, StyleSheet, Text, View, Platform } from 'react-native';
+import { useContext } from 'react';
+import { Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+
+import AuthContext from '../hooks/context';
 
 
 export default function Footer () {
+    const { backgroundColor } = useContext(AuthContext)
     return (
         <SafeAreaView>
             <View style={style.viewWrapper}>
@@ -34,12 +38,22 @@ const style = StyleSheet.create({
     viewWrapper: {
         alignItems: "center",
         flexDirection: "row",
-        position: "fixed",
-        marginTop: Platform.OS === "ios" ? 430 : 300,
-        padding: 10,
+
+        // position: "absolute",
+        // left: 0,
+        // right: 0,
+        // // bottom: 0,
+        // backgroundColor: "#fff",
+
+        marginTop: Platform.OS === "ios" ? 410 : 300,
+        // padding: 10,
+        // margin: -20,
         justifyContent: "space-between",
+        borderTopWidth: 0.2,
+        paddingTop: 10
     },
     wrapper: {
-        alignItems: "center"
+        alignItems: "center",
+        backgroundColor: "#fff"
     }
 })

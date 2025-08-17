@@ -1,12 +1,17 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { useState } from 'react';
-import { StyleSheet, Text, View, Platform } from "react-native";
-// import { Link } from "expo-router";
+import { Link } from "expo-router";
+import { useState, useContext } from 'react';
+import { Platform, StyleSheet, Text, View } from "react-native";
+
+import AuthContext from '../hooks/context';
 
 
 export default function Wallet() {
   const [showEye, setShowEye] = useState<boolean>(true)
+//   const [hashed, setHashed] = useState<boolean>(false)
+
+  const { backgroundColor } = useContext(AuthContext)
 
   const setShowEyeHandler = () => {
     setShowEye(prevState => !prevState)
@@ -14,14 +19,17 @@ export default function Wallet() {
 
   return (
     <View style={style.viewWrapper}>
-        <View style={style.nairaWrapper}>
-            <Text style={style.naira}>₦ 0.00</Text>
+        <View style={style.nairaWrapper}> {/* change from "0.00" string to number below */}
+            <Text style={[style.naira, 
+                { color: backgroundColor ? "#fff" : "black"}]}>₦ { showEye ? "0.00" : "*****" }</Text>
             {showEye && <AntDesign name="eye" size={20} color="#ccc" onPress={setShowEyeHandler}/>}
             {!showEye && <FontAwesome name="eye-slash" size={20} color="#ccc" onPress={setShowEyeHandler}/>}
         </View>
         <View style={style.addmoneyWrapper}>
-            <Text>+</Text>
-            <Text>Add Money</Text>
+            <Text style={{color:"#fff"}}>+</Text>
+            <Link href="/add-money">
+                <Text style={{color:"#fff"}}>Add Money</Text>
+            </Link>
         </View>
     </View>
   );
@@ -33,8 +41,16 @@ const style = StyleSheet.create({
         paddingBottom: 20,
         alignItems: "center",
         flexDirection: "row",
-        borderBottomWidth: Platform.OS === "ios" ? 0.2 : 0.3,
-        justifyContent: "space-between"
+        // borderBottomWidth: Platform.OS === "ios" ? 0.2 : 0.3, //the line below the wallet component
+        justifyContent: "space-between",
+
+        // elevation: 5, // Android shadow
+        // shadowColor: "#000", //ios shadow
+        // shadowOpacity: 0.2,
+        // borderBottomWidth: 0.2,
+        
+        // backgroundColor: "#fff",
+        // shadowOffset: { width: 0, height: 3 }
     },
     nairaWrapper: {
         alignItems: "center",
@@ -47,8 +63,9 @@ const style = StyleSheet.create({
     addmoneyWrapper: {
         alignItems: "center",
         flexDirection: "row",
-        borderWidth: 1,
+        // borderWidth: 1,
         borderRadius: 10,
-        padding: 5
+        padding: 10,
+        backgroundColor: "purple"
     }
 })
