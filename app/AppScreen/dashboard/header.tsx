@@ -1,33 +1,37 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { Link } from "expo-router";
+import { useNavigation } from '@react-navigation/native'
 import { useContext } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-import AuthContext from "../hooks/context";
+import AuthContext from "../../hooks/context";
 
 
 export default function Header() {
-  const { backgroundColor } = useContext(AuthContext)
+  const { backgroundColor, userPersonalData } = useContext(AuthContext)
+
+  const navigation = useNavigation<any>();
 
   return (
     <View style={style.containerView}>
         <View style={style.wrapperView}>
-            <Text style={style.name}>OU</Text>
+            <TouchableOpacity onPress={() => navigation.navigate("profile")}>
+                <Text style={style.name}>OU</Text>
+            </TouchableOpacity>
             <View>
                 <Text style={[style.nameWrapper, { 
-                    color: backgroundColor ? "#fff" : "black"}]}>Welcome</Text>
+                    color: backgroundColor ? "#fff" : "#fff"}]}>Welcome</Text>
                 <Text style={[style.nameWrapper, { 
-                    color: backgroundColor ? "#fff" : "black"}]}>Onoriode Umukoro</Text>
+                    color: backgroundColor ? "#fff" : "#fff"}]}>Onoriode Umukoro {userPersonalData.fullname}</Text>
             </View>
         </View>
 
         <View style={style.supportWrapper}>
-            <Link href="/support-agent"> {/* add the pages first => support-agent */}
-                <MaterialIcons name="support-agent" size={27} color="purple" style={style.agent}/>
-            </Link>
-            <Link href="/notification"> {/*  add the pages first => notification */}
-                <MaterialIcons name="notifications" size={27} color="purple" />
-            </Link>
+            <TouchableOpacity onPress={() => navigation.navigate("support-agent")}> 
+                <MaterialIcons name="support-agent" size={27} color="#fff" style={style.agent}/>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate("notification")}>
+                <MaterialIcons name="notifications" size={27} color="#fff" />
+            </TouchableOpacity>
         </View>
     </View>
   );
@@ -52,14 +56,15 @@ const style = StyleSheet.create({
         flexDirection: "row"
     },
     name: {
-        color: "#fff",
+        color: "purple",
         paddingTop: 7,
         paddingBottom: 7,
         paddingLeft: 5,
         paddingRight: 5,
         borderRadius: 50,
         marginRight: 5,
-        backgroundColor: "purple"
+        // borderWidth: 0.5,
+        backgroundColor: "#fff"
     },
     nameWrapper: {
         fontSize: 17,

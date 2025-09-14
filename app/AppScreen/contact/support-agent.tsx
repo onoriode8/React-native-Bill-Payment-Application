@@ -1,5 +1,4 @@
-import { Link } from "expo-router";
-import { ScrollView, StyleSheet, Text, View, Platform } from "react-native";
+import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
@@ -9,9 +8,6 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 export default function SupportAgent() {
     return (
         <ScrollView style={{backgroundColor: "#fff"}}>
-            <View style={styles.liveChatWrapper}>
-                <Link href="/live-chat"><Text>LiveChat</Text></Link>
-            </View>
             <View style={styles.wrappedSupport}>
                 <View style={styles.supportIconWrapper}>
                     <MaterialIcons name="support-agent" size={40} color="#fff" />
@@ -23,7 +19,7 @@ export default function SupportAgent() {
 
                 <View style={styles.wrappedWhatsapp}>
                     <FontAwesome6 name="whatsapp" size={24} color="green" style={styles.whatsappStyles}/>
-                    <Link href="/add-money"><Text>WhatsApp</Text></Link> {/*add my whatsapp link directly here to the whatsapp contact path */}
+                    <Text>WhatsApp</Text> {/*add my whatsapp link directly here to the whatsapp contact path */}
                 </View>
             </View>
         </ScrollView>
@@ -31,14 +27,9 @@ export default function SupportAgent() {
 }
 
 const styles = StyleSheet.create({
-    liveChatWrapper: {
-        alignItems: "flex-end",
-        marginBottom: 50,
-        marginRight: 10,
-        marginTop: 5
-    },
     wrappedSupport: {
-        flex: 0.5,
+        flex: 1,
+        marginTop: 80,
         alignItems: "center",
         justifyContent: "center",
     },

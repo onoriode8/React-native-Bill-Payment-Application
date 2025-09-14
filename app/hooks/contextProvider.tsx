@@ -1,5 +1,8 @@
-import { useState } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from "axios";
+import { useEffect, useState } from "react";
 
+import { PROD_API_URL } from '../config';
 import AuthContext from "./context";
 
 
@@ -7,23 +10,74 @@ interface ContextProviderProps {
     children: React.ReactNode
 }
 
-interface UserData {
-    email: string,
-    token: string,
-    userId: string,
-    fullname: string,
-    totalBalance: number,
-}
+// interface UserData {
+//     email: string,
+//     token: string,
+//     userId: string,
+//     fullname: string,
+//     totalBalance: number,
+// }
 
 const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
     const [auth, setAuth] = useState<boolean>(false)
+    const [error, setError] = useState<boolean>(false)
+
     const [userData, setUserData] = useState({
         token: "", email: "", userId: "", fullname: "", 
         totalBalance: 0.00,
     })
+    const [loading, setLoading] = useState<boolean>(false)
+
     const [backgroundColor, setBackgroundColor] = useState(false)
 
+
     console.log(auth)
+    // useEffect(() => {
+    //     if(auth === false) {
+    //         router.replace("/login");
+    //     }
+    // }, [])
+
+    useEffect(() => {
+        // if(userData.userId?.length !== 0 && userData.token.length !== 0 && userData.email?.length !== 0) {
+        //     return
+        // }
+        if(auth === false) return
+        const fetchUserData = async () => {
+            //secureStorage or keyChain storage => will only store sensitive data, like userId and accessToken.
+            //const sensitiveData = await SecureStorage("sensitive") //example
+            //console.log("FROM SECURE-STORAGE-SENSITIVE", sensitiveData)
+            // const data = await AsyncStorage.getItem("userData")
+            // console.log("FROM ASYNC-STORAGE", data)
+            console.log("53", userData)
+            try {
+                setLoading(true)
+                const res = await axios.get(`${PROD_API_URL}/user/get/personal/data/${userData.userId}`, {
+                    headers: {
+                        "Authorization": "Bearer " + userData.token
+                    }
+                })
+                console.log("RESPONSE", res)
+
+                // Save
+                // await AsyncStorage.setItem('user', JSON.stringify(userData));
+                setLoading(false)
+                setUserData({
+                    fullname: res.data.fullname, 
+                    token: res.data.token, 
+                    email: res.data.email, 
+                    userId: res.data.userId,
+                    totalBalance: res.data.totalBalance
+                })
+                // setAuthentication(true)
+            } catch(err: any) {
+                setLoading(false)
+                console.log("ERROR 76 FROM PROVIDER", err.response.data)
+                setError(err.response?.data || "Something went wrong")
+            }
+        }
+        fetchUserData()
+    }, [userData]) //userData.token, userData.userId, userData
     
     const toggleBackgroundColorHandler = () => {
         setBackgroundColor(prevState => !prevState)
@@ -34,7 +88,7 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
         setAuth(args)
     }
 
-    const setUserDataHandler = (args: UserData) => {
+    const setUserDataHandler = (args: any) => { //: UserData
         console.log("Data from server", args)
         setUserData(args)
     }

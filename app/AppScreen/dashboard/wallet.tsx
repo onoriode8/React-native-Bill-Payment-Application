@@ -1,36 +1,39 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link } from "expo-router";
-import { useState, useContext } from 'react';
-import { Platform, StyleSheet, Text, View } from "react-native";
+import { useNavigation } from '@react-navigation/native';
+import { useContext, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View, SafeAreaView } from "react-native";
 
-import AuthContext from '../hooks/context';
+
+import AuthContext from '../../hooks/context';
+
 
 
 export default function Wallet() {
   const [showEye, setShowEye] = useState<boolean>(true)
 //   const [hashed, setHashed] = useState<boolean>(false)
 
-  const { backgroundColor } = useContext(AuthContext)
+  const { backgroundColor, userPersonalData } = useContext(AuthContext)
 
   const setShowEyeHandler = () => {
     setShowEye(prevState => !prevState)
   }
 
+  const navigation = useNavigation<any>()
+
   return (
     <View style={style.viewWrapper}>
         <View style={style.nairaWrapper}> {/* change from "0.00" string to number below */}
             <Text style={[style.naira, 
-                { color: backgroundColor ? "#fff" : "black"}]}>₦ { showEye ? "0.00" : "*****" }</Text>
+                { color: backgroundColor ? "#fff" : "#fff"}]}
+                >₦ { showEye ? userPersonalData.totalBalance : "*****" }</Text>
             {showEye && <AntDesign name="eye" size={20} color="#ccc" onPress={setShowEyeHandler}/>}
             {!showEye && <FontAwesome name="eye-slash" size={20} color="#ccc" onPress={setShowEyeHandler}/>}
         </View>
-        <View style={style.addmoneyWrapper}>
-            <Text style={{color:"#fff"}}>+</Text>
-            <Link href="/add-money">
-                <Text style={{color:"#fff"}}>Add Money</Text>
-            </Link>
-        </View>
+        <TouchableOpacity style={style.addmoneyWrapper} onPress={() => navigation.navigate("add-money")}>
+            <Text style={{color:"black"}}>+</Text>
+            <Text style={{color:"black"}}>Add Money</Text>
+        </TouchableOpacity>
     </View>
   );
 }
@@ -66,6 +69,6 @@ const style = StyleSheet.create({
         // borderWidth: 1,
         borderRadius: 10,
         padding: 10,
-        backgroundColor: "purple"
+        backgroundColor: "#fff"
     }
 })

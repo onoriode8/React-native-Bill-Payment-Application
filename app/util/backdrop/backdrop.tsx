@@ -1,6 +1,7 @@
 import { StyleSheet, View } from 'react-native'
 
 
+
 export default function Backdrop() {
     return (
         <View style={styles.backdropStyle}></View>

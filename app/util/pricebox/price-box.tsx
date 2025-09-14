@@ -1,12 +1,17 @@
 import { SafeAreaView, Text, View, StyleSheet } from "react-native";
 
 
-export default function PriceBox({ price, click }) {
+interface PriceBoxProps {
+    price: number,
+    click: () => void
+}
+
+export default function PriceBox({ price, click }: PriceBoxProps) {
     return (
         <SafeAreaView>
-            <View style={styles.priceBoxWrapper} onPress={click}>
-                <Text style={styles.naira}>₦{price}</Text>
-                <Text>pay ₦{price}</Text>
+            <View style={styles.priceBoxWrapper}>
+                <Text style={styles.naira} onPress={click}>₦{price}</Text>
+                <Text onPress={click}>pay ₦{price}</Text>
             </View>
         </SafeAreaView>
     )

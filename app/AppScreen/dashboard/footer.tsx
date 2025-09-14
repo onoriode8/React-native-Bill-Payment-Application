@@ -4,7 +4,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useContext } from 'react';
 import { Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
-import AuthContext from '../hooks/context';
+import AuthContext from '../../hooks/context';
 
 
 export default function Footer () {

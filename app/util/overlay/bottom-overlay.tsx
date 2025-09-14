@@ -1,9 +1,11 @@
-import { StyleSheet, Text, TouchableOpacity, View, Platform } from "react-native";
-
+import { useState } from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { StyleSheet, Text, TouchableOpacity, View, Platform, SafeAreaView } from "react-native";
+
 
 import Backdrop from "../backdrop/backdrop";
 import Wallet from "../wallet/wallet";
+import PaymentPinOverLay from './payment-pin-overlay'
 
 
 interface BottomOverLayProps {
@@ -11,16 +13,23 @@ interface BottomOverLayProps {
     bonus: number, //cashback Bonus to Earn
     number: number,
     networkType: string,
-    network: string
+    network: string,
+    networkLogo: string,
+    recharge: string,
+    closeBottomOverLay: () => {}
 }
 
-export default function BottomOverLay({amount, bonus, networkType, network, number}: BottomOverLayProps) {
+export default function BottomOverLay({amount, bonus, networkType, recharge,
+    networkLogo, network, number, closeBottomOverLay}: BottomOverLayProps) {
+
+    const [openPaymentPin, setOpenPaymentPin] = useState<boolean>(false);
+
     return(
         <View>
             <Backdrop />
             <View style={styles.containerView}>
                 <View style={styles.viewWrapper}>
-                    <Ionicons name="close-outline" size={24} color="black" />
+                    <Ionicons name="close-outline" size={25} color="black" onPress={closeBottomOverLay} />
                     <Text></Text>
                 </View>
                 <Text style={styles.amountEntered}>₦{amount}</Text> {/* convert to toString() to have #1,000*/}
@@ -28,7 +37,7 @@ export default function BottomOverLay({amount, bonus, networkType, network, numb
                     <View style={styles.mainViewWrapper}>
                         <Text style={styles.text}>Type</Text>
                         <View style={{alignItems: "center", flexDirection: "row"}}>
-                            <Text style={styles.text}>{network} network logo </Text>
+                            <Text style={styles.text}>{network} {networkLogo} </Text>
                             <Text style={styles.text}>{networkType}</Text>
                         </View>
                     </View>
@@ -46,10 +55,12 @@ export default function BottomOverLay({amount, bonus, networkType, network, numb
                     </View>
                 </View>
                 <Wallet /> {/* wallet here */}
-                <TouchableOpacity style={styles.touchableOpacityWrapper}>
-                    <Text style={styles.rechargeText}>Recharge</Text>
+                <TouchableOpacity style={styles.touchableOpacityWrapper} onPress={() => setOpenPaymentPin(true)}>
+                    <Text style={styles.rechargeText}>{recharge}</Text>
                 </TouchableOpacity>
             </View>
+            {/* {openPaymentPin && <Backdrop />} */}
+            {openPaymentPin && <PaymentPinOverLay />}
         </View>
     )
 }

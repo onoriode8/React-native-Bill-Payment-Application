@@ -1,21 +1,25 @@
 import { useContext } from "react";
-import { View } from "react-native";
+import { SafeAreaView, View } from "react-native";
 
-import DashBoard from './dashboard/dashboard';
+import DashBoard from './AppScreen/dashboard/dashboard';
+import Login from "./AuthScreen/login";
 import AuthContext from "./hooks/context";
-import Login from "./login";
-import ContextProvider from "./hooks/contextProvider";
+
 
 
 export default function Index() {
-  const { authentication } = useContext(AuthContext)
+  const { authentication, userPersonalData } = useContext(AuthContext)
+  console.log("CHANGE FROM FALSE to", authentication)
+  console.log("USER-PERSONAL DATA", userPersonalData)
 
   return (
-    <ContextProvider>
-      <View>
-        {authentication && <Login />}
+    <SafeAreaView style={{flex: 1}}>
+      {!authentication && <View style={{flex: 1}}>
+        <Login />
+      </View>}
+      {authentication && <View>
         <DashBoard /> 
-      </View>
-    </ContextProvider>
+      </View>}
+    </SafeAreaView>
   );
 }
