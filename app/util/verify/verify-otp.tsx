@@ -1,5 +1,4 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Spinner from "react-native-loading-spinner-overlay";
 
@@ -12,15 +11,14 @@ interface VerifyOTPprops {
     switchPath: string,
     loading: boolean,
     contact: string,
+    clicked: () => void,
     resendOtpHandler: () => void
 }
 
 export default function VerifyOTP(
-    { titleMessage, switchInstead, contact, switchPath,
+    { titleMessage, switchInstead, contact, switchPath, clicked,
         selectedNumber, error, loading, resendOtpHandler }: VerifyOTPprops) {
     const message = `Didn't receive the OTP ?`
-
-    const navigation = useNavigation<any>();
 
     return (
         <SafeAreaView>
@@ -52,7 +50,7 @@ export default function VerifyOTP(
                             onPress={resendOtpHandler}>Resend</Text>
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity onPress={() => navigation.navigate(switchPath)}>
+                <TouchableOpacity onPress={clicked}>
                     <Text style={{color: "purple", marginTop: 50,
                          paddingLeft: 10}}>{switchInstead}</Text>
                 </TouchableOpacity>

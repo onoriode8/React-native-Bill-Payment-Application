@@ -1,9 +1,11 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
+import Spinner from 'react-native-loading-spinner-overlay';
 import { useContext, useState } from 'react';
 import { SafeAreaView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 
 import Context from '../../hooks/context';
+import { useSendOTP } from '../../custom/send-otp';
 
 
 export default function Settings() {
@@ -13,14 +15,18 @@ export default function Settings() {
 
     const {} = useContext(Context) //get isMFA value if set up or not, like true or false from server.
     const navigation = useNavigation<any>()
+
+    const { sendOTPtoPhoneNumber, error, isLoading } = useSendOTP()
+
     return (
         <SafeAreaView>
+            <Spinner visible={isLoading} />
             <View style={style.container}>
                 <TouchableOpacity style={style.wrapper} onPress={() => navigation.navigate("verify-pin")}>
                     <Text style={style.textStyle}>Change Payment PIN</Text>
                     <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
                 </TouchableOpacity>
-                <TouchableOpacity style={style.wrapper} onPress={() => navigation.navigate("verify-phone-number")}>
+                <TouchableOpacity style={style.wrapper} onPress={sendOTPtoPhoneNumber}>
                     <Text style={style.textStyle}>Forgot Payment PIN</Text>
                     <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
                 </TouchableOpacity>

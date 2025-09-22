@@ -28,15 +28,13 @@ export const useEnterPaymentPin = () => {
 
     const { userPersonalData } = useContext(Context)
 
-    const userId = "123527627822";
-
     useEffect(() => {
         if(selectedNumber.length !== 4) return
-        navigation.navigate("change-pin") //
+        //navigation.navigate("change-pin") //
         setLoading(true)
         const verifyPinHandler = async () => {
             try {
-                const response = await axios.post(`${PROD_API_URL}/user/verify/pin/${userId}`, {
+                const response = await axios.post(`${PROD_API_URL}/user/verify/payment/pin/${userPersonalData.userId}`, {
                     selectedNumber //send an array of password in it.
                 }, {
                     headers: {
