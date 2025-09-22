@@ -1,6 +1,7 @@
-import { useState, useContext } from 'react';
-import { SafeAreaView, View, Text, Switch, StyleSheet, TouchableOpacity } from 'react-native'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { useNavigation } from '@react-navigation/native';
+import { useContext, useState } from 'react';
+import { SafeAreaView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 
 import Context from '../../hooks/context';
 
@@ -11,22 +12,23 @@ export default function Settings() {
     const [enable2FA, setEnable2FA] = useState<boolean>(false)
 
     const {} = useContext(Context) //get isMFA value if set up or not, like true or false from server.
+    const navigation = useNavigation<any>()
     return (
         <SafeAreaView>
             <View style={style.container}>
-                <TouchableOpacity style={style.wrapper}>
+                <TouchableOpacity style={style.wrapper} onPress={() => navigation.navigate("verify-pin")}>
                     <Text style={style.textStyle}>Change Payment PIN</Text>
                     <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
                 </TouchableOpacity>
-                <TouchableOpacity style={style.wrapper}>
+                <TouchableOpacity style={style.wrapper} onPress={() => navigation.navigate("verify-phone-number")}>
                     <Text style={style.textStyle}>Forgot Payment PIN</Text>
                     <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
                 </TouchableOpacity>
-                <TouchableOpacity style={style.wrapper}>
+                <TouchableOpacity style={style.wrapper} onPress={() => navigation.navigate()}>
                     <Text style={style.textStyle}>Change App Password</Text>
                     <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
                 </TouchableOpacity>
-                <TouchableOpacity style={style.wrapper}>
+                <TouchableOpacity style={style.wrapper} onPress={() => navigation.navigate()}>
                     <Text style={style.textStyle}>Forgot App Password</Text>
                     <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
                 </TouchableOpacity>
@@ -44,7 +46,7 @@ export default function Settings() {
                     <Switch value={enable2FA} 
                         onValueChange={() => setEnable2FA(true)} /> {/* boolean will becoming from server */}
                 </TouchableOpacity>
-                <TouchableOpacity style={[style.wrapper, { marginBottom: 30 }]}>
+                <TouchableOpacity style={[style.wrapper, { marginBottom: 30 }]} onPress={() => navigation.navigate()}>
                     <Text style={style.textStyle}>Security Questions</Text>
                     <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
                 </TouchableOpacity>
@@ -76,8 +78,8 @@ const style = StyleSheet.create({
         justifyContent: "space-between"
     },
     textStyle: {
-        color: "purple", // "#1139"
-        fontWeight: "600"
+        color: "black", // "#1139"
+        fontWeight: "400"
     },
     logoutWrapperStyle: {
         borderRadius: 50,

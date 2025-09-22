@@ -5,7 +5,7 @@ import { StyleSheet, Text, TouchableOpacity, View, Platform, SafeAreaView } from
 
 import Backdrop from "../backdrop/backdrop";
 import Wallet from "../wallet/wallet";
-import PaymentPinOverLay from './payment-pin-overlay'
+import PaymentPinOverLay from './verify-pin-overlay'
 
 
 interface BottomOverLayProps {

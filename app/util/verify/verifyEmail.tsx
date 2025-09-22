@@ -12,9 +12,9 @@ import {
     View
 } from 'react-native';
 
-import { PROD_API_URL } from '../config';
-import AuthContext from '../hooks/context';
-import AppLogo from './logo/app-logo';
+import { PROD_API_URL } from '../../config';
+import AuthContext from '../../hooks/context';
+import AppLogo from '../logo/app-logo';
 
 
 export default function VerifyCode() {

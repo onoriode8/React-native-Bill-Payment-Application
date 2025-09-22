@@ -283,7 +283,6 @@ const styles = StyleSheet.create({
         borderColor: Platform.OS === "android" ? "rgba(0, 0, 0, 0.2)" : "#ccc"
     },    
     touchableOpacityContainer: {
-        // borderWidth: 5,
         height: 45,
         borderRadius: 8,
         justifyContent: "center",
@@ -293,7 +292,9 @@ const styles = StyleSheet.create({
     },
     button: {
         textAlign: "center",
-        color: "#fff"
+        color: "#fff",
+        fontWeight: "900",
+        fontSize: 15,
     },
     textBtn: {
         marginTop: 20,

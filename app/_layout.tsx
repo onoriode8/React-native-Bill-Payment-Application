@@ -1,22 +1,27 @@
-import { useContext } from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useContext } from 'react';
 
 import AddMoney from './AppScreen/addMoney/add-money';
 import LiveChat from './AppScreen/contact/live-chat';
+import NavigateLiveChat from './AppScreen/contact/navigate-live-chat';
 import SupportAgent from './AppScreen/contact/support-agent';
 import DashBoard from './AppScreen/dashboard/dashboard';
 import Notification from './AppScreen/notification/notification';
+import ProfileScreen from './AppScreen/profile/profileScreen';
+import ChangePin from "./AppScreen/reset-pin/change-pin";
+import ForgotPin from "./AppScreen/reset-pin/forgot-pin";
 import Airtime from './AppScreen/services/airtime';
+import History from './AppScreen/tabscreen/history';
+import Reward from './AppScreen/tabscreen/reward';
+import Settings from './AppScreen/tabscreen/settings';
 import Login from './AuthScreen/login';
 import AuthContext from './hooks/context';
 import ContextProvider from './hooks/contextProvider';
-import VerifyEmailWithCode from './util/verifyEmail';
-import ProfileScreen from './AppScreen/profile/profileScreen'
-import NavigateLiveChat from './AppScreen/contact/navigate-live-chat'
-import Settings from './AppScreen/tabscreen/settings';
-import History from './AppScreen/tabscreen/history';
-import Reward from './AppScreen/tabscreen/reward';
+import VerifyPinOverLay from './util/overlay/verify-pin-overlay';
+import VerifyEmailAddress from './util/verify-identity/verify-email-address';
+import VerifyPhoneNumber from './util/verify-identity/verify-phone-number';
+import VerifyEmailWithCode from './util/verify/verifyEmail';
 
 
 
@@ -58,10 +63,6 @@ export default function RootLayout() {
   return (
    <ContextProvider>
       <Stack.Navigator initialRouteName='login'>
-        {/* <Stack.Screen name="index" options={{headerBackVisible: false, headerLeft: () => null, title: "Dashboard"}}/> */}
-        {/* <Stack.Screen name="dashboard" component={DashBoard} 
-          options={{ title: "Dashboard", headerTitle: "", headerShown: false,
-          headerStyle: { backgroundColor: "purple"}, headerBackVisible: false }} /> */}
         <Stack.Screen name="dashboard" component={TabsRootLayout} options={{ headerShown: false }}/>
         <Stack.Screen name="login" component={Login} options={{ title: "Login", headerShown: false }} />
         <Stack.Screen name="add-money" component={AddMoney} options={{ title: "Add Money", headerStyle: { backgroundColor: "purple"}, 
@@ -87,6 +88,23 @@ export default function RootLayout() {
           headerTintColor: "#fff", headerStyle: { backgroundColor: "purple" }, headerBackTitle: "P",
           headerTitleStyle: { fontWeight: "bold" }, headerBackTitleStyle: { fontSize: 1 } 
          }} />
+        <Stack.Screen name="verify-pin" component={VerifyPinOverLay} options={{ headerShown: false }} />
+        <Stack.Screen name="verify-phone-number" component={VerifyPhoneNumber} 
+          options={{ title: "Verify Phone Number", headerStyle: { backgroundColor: "purple" },
+          headerTintColor: "#fff", headerTitleStyle: { fontWeight: "bold" }, headerBackTitle: "P",
+          headerBackTitleStyle: { fontSize: 1 } }} />
+        <Stack.Screen name="verify-email-address" component={VerifyEmailAddress} 
+          options={{ title: "Verify Email", headerStyle: { backgroundColor: "purple" },
+          headerTintColor: "#fff", headerTitleStyle: { fontWeight: "bold" }, headerBackTitle: "P",
+          headerBackTitleStyle: { fontSize: 1 } }} />
+        <Stack.Screen name="change-pin" component={ChangePin} 
+          options={{ title: "Reset Payment Pin", headerStyle: { backgroundColor: "purple" },
+          headerTintColor: "#fff", headerTitleStyle: { fontWeight: "bold" }, headerBackTitle: "P",
+          headerBackTitleStyle: { fontSize: 1 } }} />
+        <Stack.Screen name="forgot-pin" component={ForgotPin} 
+          options={{ title: "Reset Payment Pin", headerStyle: { backgroundColor: "purple" },
+          headerTintColor: "#fff", headerTitleStyle: { fontWeight: "bold" }, headerBackTitle: "P",
+          headerBackTitleStyle: { fontSize: 1 } }} />
       </Stack.Navigator>
     </ContextProvider>
   );
