@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 
 import { PROD_API_URL } from '../config';
 import Context from '../hooks/context';
@@ -17,7 +17,11 @@ export const useResetPin = () => {
     const [isFocused, setIsFocused] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
 
-    const { userPersonalData } = useContext(Context)
+    const { userPersonalData, dispatchPath } = useContext(Context)
+
+    useEffect(() => {
+        dispatchPath("")
+    }, [])
     
     const resetPinHandler = async () => {
         if(isFocused === true) {
@@ -48,14 +52,24 @@ export const useResetPin = () => {
             const formattedOldPaymentPin = Number(oldPaymentPin)
             const formattedNewPaymentPin = Number(newPaymentPin)
             const formattedConfirmedPaymentPin = Number(confirmedPaymentPin);
-
-            const response = await axios.post(`${PROD_API_URL}/reset/payment/pin/${userPersonalData.userId}`, {
-                formattedOldPaymentPin, formattedNewPaymentPin, formattedConfirmedPaymentPin
-            }, {
-                headers: {
-                    "Authorization": "Bearer " + userPersonalData.token
-                }
-            })
+            let response;
+            if(isFocused === true) {
+                response = await axios.patch(`${PROD_API_URL}/user/change/payment/pin/${userPersonalData.userId}`, {
+                    formattedOldPaymentPin, formattedNewPaymentPin, formattedConfirmedPaymentPin
+                }, {
+                    headers: {
+                        "Authorization": "Bearer " + userPersonalData.token
+                    }
+                })
+            } else if(isFocused === false) { // /user/reset/payment/pin route added to backend successfully.
+                response = await axios.patch(`${PROD_API_URL}/user/reset/payment/pin/${userPersonalData.userId}`, {
+                    formattedNewPaymentPin, formattedConfirmedPaymentPin
+                }, {
+                    headers: {
+                        "Authorization": "Bearer " + userPersonalData.token
+                    }
+                })
+            }
             setOldPaymentPin("") 
             setNewPaymentPin("") 
             setConfirmedPaymentPin("") 

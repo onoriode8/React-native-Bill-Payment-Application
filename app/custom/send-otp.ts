@@ -12,12 +12,12 @@ export const useSendOTP = () => {
 
     const navigation = useNavigation<any>();
 
-    const { userPersonalData } = useContext(AuthContext)
+    const { userPersonalData, dispatchPath } = useContext(AuthContext)
 
     //send otp code to phone number.
     const sendOTPtoPhoneNumber = async() => {
         setIsLoading(true)
-        console.log("CLICKED")
+        dispatchPath("forgot-pin") //dispatch path
         navigation.navigate("verify-phone-number")
         try {
             const response = await axios.get(`${PROD_API_URL}/user/send/otp/phone/${userPersonalData.userId}`, {
@@ -40,7 +40,6 @@ export const useSendOTP = () => {
     //send otp code to email address.
     const sendOTPtoEmailAddress = async() => {
         setIsLoading(true)
-        console.log("CLICKED")
         navigation.navigate("verify-email-address")
         try {
             const response = await axios.get(`${PROD_API_URL}/user/send/otp/email/${userPersonalData.userId}`, {
@@ -60,5 +59,21 @@ export const useSendOTP = () => {
         }
     }
 
-    return { sendOTPtoPhoneNumber, sendOTPtoEmailAddress, error, isLoading }
+    const dispatchPathHandler = () => {
+        dispatchPath("create-payment-pin") // navigate to path
+        navigation.navigate("verify-phone-number")
+    }
+
+    const dispatchPathToChangeAppPasswordHandler = () => {
+        dispatchPath("change-app-password") // navigate to path
+        navigation.navigate("verify-phone-number")
+    }
+
+    const dispatchPathToForgotAppPasswordHandler = () => {
+        dispatchPath("forgot-app-password") // navigate to path
+        navigation.navigate("verify-phone-number")
+    }
+
+    return { sendOTPtoPhoneNumber, sendOTPtoEmailAddress, dispatchPathToForgotAppPasswordHandler,
+        error, isLoading, dispatchPathHandler, dispatchPathToChangeAppPasswordHandler }
 }

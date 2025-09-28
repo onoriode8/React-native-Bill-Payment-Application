@@ -13,28 +13,39 @@ export default function Settings() {
     const [enableBiometric, setEnableBiometric] = useState<boolean>(false)
     const [enable2FA, setEnable2FA] = useState<boolean>(false)
 
-    const {} = useContext(Context) //get isMFA value if set up or not, like true or false from server.
+    const { userPersonalData } = useContext(Context) //get isMFA value if set up or not, like true or false from server.
     const navigation = useNavigation<any>()
 
-    const { sendOTPtoPhoneNumber, error, isLoading } = useSendOTP()
+    const { sendOTPtoPhoneNumber, error, isLoading, dispatchPathToForgotAppPasswordHandler,
+        dispatchPathHandler, dispatchPathToChangeAppPasswordHandler } = useSendOTP()
 
     return (
         <SafeAreaView>
             <Spinner visible={isLoading} />
             <View style={style.container}>
-                <TouchableOpacity style={style.wrapper} onPress={() => navigation.navigate("verify-pin")}>
+                <TouchableOpacity style={style.wrapper} 
+                    onPress={userPersonalData.isPaymentPinSet ? () => navigation.navigate("verify-pin") 
+                        : dispatchPathHandler
+                        // () => navigation.navigate("create-payment-pin")
+                        }>
                     <Text style={style.textStyle}>Change Payment PIN</Text>
-                    <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
+                    <View style={{flexDirection: "row", alignItems: "center"}}>
+                        {!userPersonalData.isPaymentPinSet && <Text style={{color: "orange"}}>Not set</Text>}
+                        <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
+                    </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={style.wrapper} onPress={sendOTPtoPhoneNumber}>
                     <Text style={style.textStyle}>Forgot Payment PIN</Text>
-                    <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
+                    <View style={{flexDirection: "row", alignItems: "center"}}>
+                        {!userPersonalData.isPaymentPinSet && <Text style={{color: "orange"}}>Not set</Text>}
+                        <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
+                    </View>
                 </TouchableOpacity>
-                <TouchableOpacity style={style.wrapper} onPress={() => navigation.navigate()}>
+                <TouchableOpacity style={style.wrapper} onPress={dispatchPathToChangeAppPasswordHandler}>
                     <Text style={style.textStyle}>Change App Password</Text>
                     <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
                 </TouchableOpacity>
-                <TouchableOpacity style={style.wrapper} onPress={() => navigation.navigate()}>
+                <TouchableOpacity style={style.wrapper} onPress={dispatchPathToForgotAppPasswordHandler}>
                     <Text style={style.textStyle}>Forgot App Password</Text>
                     <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
                 </TouchableOpacity>

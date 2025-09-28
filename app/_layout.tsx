@@ -22,7 +22,9 @@ import VerifyPinOverLay from './util/overlay/verify-pin-overlay';
 import VerifyEmailAddress from './util/verify-identity/verify-email-address';
 import VerifyPhoneNumber from './util/verify-identity/verify-phone-number';
 import VerifyEmailWithCode from './util/verify/verifyEmail';
-
+import createPaymentPin from './AppScreen/reset-pin/create-payment-pin'
+import ChangeAppPassword from "./AppScreen/reset-pin/change-app-password"
+import ForgotAppPassword from "./AppScreen/reset-pin/forgot-app-password"
 
 
 const Tab = createBottomTabNavigator()
@@ -104,6 +106,18 @@ export default function RootLayout() {
         <Stack.Screen name="forgot-pin" component={ForgotPin} 
           options={{ title: "Reset Payment Pin", headerStyle: { backgroundColor: "purple" },
           headerTintColor: "#fff", headerTitleStyle: { fontWeight: "bold" }, headerBackTitle: "P",
+          headerBackTitleStyle: { fontSize: 1 } }} />
+        <Stack.Screen name="create-payment-pin" component={createPaymentPin} 
+          options={{ title: "Create Payment Pin", headerStyle: { backgroundColor: "purple" },
+          headerTintColor: "#fff", headerTitleStyle: { fontWeight: "bold" }, headerBackTitle: "P",
+          headerBackTitleStyle: { fontSize: 1 } }} />     
+        <Stack.Screen name="change-app-password" component={ChangeAppPassword}
+          options={{ title: "Change App Password", headerStyle: { backgroundColor: "purple" }, 
+          headerTintColor: "#fff", headerTitleStyle: { fontWeight: "bold" }, headerBackTitle: "C",
+          headerBackTitleStyle: { fontSize: 1 } }} />
+        <Stack.Screen name="forgot-app-password" component={ForgotAppPassword} 
+          options={{ title: "Change App Password", headerStyle: { backgroundColor: "purple" }, 
+          headerTintColor: "#fff", headerTitleStyle: { fontWeight: "bold" }, headerBackTitle: "C",
           headerBackTitleStyle: { fontSize: 1 } }} />
       </Stack.Navigator>
     </ContextProvider>

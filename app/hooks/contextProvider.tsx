@@ -21,15 +21,24 @@ interface ContextProviderProps {
 const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
     const [auth, setAuth] = useState<boolean>(false)
     const [error, setError] = useState<boolean>(false)
+    const [path, setPath] = useState<string>("")
 
     const [userData, setUserData] = useState({
         token: "", email: "", userId: "", fullname: "", 
-        totalBalance: 0.00,
+        totalBalance: 0.00, isPaymentPinSet: false
     })
     const [loading, setLoading] = useState<boolean>(false)
 
     const [backgroundColor, setBackgroundColor] = useState(false)
 
+    useEffect(() => {
+        const extractedPinPaymentValue = async() => {
+            const data = await AsyncStorage.getItem("userData");
+            const parsed = JSON.parse(data);
+            console.log("RETRIEVED", parsed);
+        }
+        extractedPinPaymentValue()
+    }, [])
 
     console.log(auth)
     // useEffect(() => {
@@ -67,7 +76,8 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
                     token: res.data.token, 
                     email: res.data.email, 
                     userId: res.data.userId,
-                    totalBalance: res.data.totalBalance
+                    totalBalance: res.data.totalBalance,
+                    isPaymentPinSet: res.data.isPaymentPinSet
                 })
                 // setAuthentication(true)
             } catch(err: any) {
@@ -93,6 +103,11 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
         setUserData(args)
     }
 
+    const dispatchPathHandler = (path: string) => {
+        console.log("PATH", path)
+        setPath(path)
+    }
+
     return (
         <AuthContext.Provider value={{
             userPersonalData: {
@@ -101,7 +116,10 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
                 userId: userData.userId,
                 fullname: userData.fullname,
                 totalBalance: userData.totalBalance,
+                isPaymentPinSet: userData.isPaymentPinSet
             },
+            path: path,
+            dispatchPath: dispatchPathHandler,
             backgroundColor: backgroundColor,
             setBackgroundColor: toggleBackgroundColorHandler,
             userfunc: setUserDataHandler,

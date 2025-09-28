@@ -26,16 +26,22 @@ export const useEnterPaymentPin = () => {
 
     const navigation = useNavigation<any>();
 
-    const { userPersonalData } = useContext(Context)
+    const { userPersonalData, path } = useContext(Context)
 
     useEffect(() => {
         if(selectedNumber.length !== 4) return
-        //navigation.navigate("change-pin") //
+        const extractedPin = selectedNumber.join("")
+        const formattedExtractedPin = extractedPin.replace(/,/g, '')
+        const parsedExtractedPinToNumber = Number(extractedPin.replace(/,/g, ''))
+        
+        navigation.navigate(path)  //check if change-pin is dispatch to context like other path was.
+        // navigation.navigate("change-pin") //
         setLoading(true)
         const verifyPinHandler = async () => {
             try {
-                const response = await axios.post(`${PROD_API_URL}/user/verify/payment/pin/${userPersonalData.userId}`, {
-                    selectedNumber //send an array of password in it.
+                const selectedNumber = parsedExtractedPinToNumber
+                const response = await axios.post(`${PROD_API_URL}/user/verify/payment/pin/${userPersonalData.userId}`, { //this path or url already connected to backend and it passed.
+                    selectedNumber
                 }, {
                     headers: {
                         "Authorization": "Bearer " + userPersonalData.token
@@ -51,7 +57,7 @@ export const useEnterPaymentPin = () => {
                     }, 3500);
                     return;
                 }
-                //navigation.navigate(path) //pass path from other component down to here to push if pin is valid.
+                navigation.navigate(path)
             } catch (error: any) {
                 setLoading(false)
                 if(selectedNumber.length > 0) {
@@ -80,7 +86,7 @@ export const useVerifyOTP = () => {
     const [loading, setLoading] = useState<boolean>(false)
     const [selectedNumber, setSelectedNumber] = useState<number[]>([])
 
-    const { userPersonalData } = useContext(Context);
+    const { userPersonalData, path } = useContext(Context);
 
     const navigation = useNavigation<any>();
 
@@ -116,7 +122,8 @@ export const useVerifyOTP = () => {
 
     useEffect(() => {
         if(selectedNumber.length !== 6) return
-        navigation.navigate("forgot-pin") //
+        //console.log("PATH SAVED", path)
+        //navigation.navigate(path) //"forgot-pin"
         const verifyOTPHandler = async () => {
             try {
                 setLoading(true)
@@ -129,7 +136,7 @@ export const useVerifyOTP = () => {
                 })
                 setLoading(false)
                 console.log("RESPONSE", response.data);
-                navigation.navigate("forgot-pin")
+                navigation.navigate(path) //"forgot-pin"
             } catch(err) {
                 setLoading(false)
                 const errorMessage = err.message || "Something went wrong"

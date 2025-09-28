@@ -7,6 +7,7 @@ interface UserData {
     userId: string,
     fullname: string,
     totalBalance: number,
+    isPaymentPinSet: boolean,
     //add other data from server like balance, isMFA, isEmailVerifed and others
 }
 
@@ -15,6 +16,8 @@ interface AuthContextProps {
     userfunc: (args: UserData) => void,
     backgroundColor: boolean,
     authentication: boolean,
+    path: string,
+    dispatchPath: (path: string) => void,
     setBackgroundColor: () => void,
     setAuthentication: (args: boolean) => void
 }
@@ -26,7 +29,10 @@ const AuthContext = createContext<AuthContextProps>({
         userId: "",
         fullname: "",
         totalBalance: 0.00,
+        isPaymentPinSet: false,
     },
+    path: "",
+    dispatchPath: (path: string) => {},
     backgroundColor: false,
     setBackgroundColor: () => {},
     userfunc: () => {},
