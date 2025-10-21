@@ -7,7 +7,8 @@ import { useSendOTP } from "../../custom/send-otp";
 
 
 export default function VerifyPhoneNumber() {
-    const { selectedNumber, error, loading, handlePress, deleteLastNumber, resendOtpHandler } = useVerifyOTP()
+    const { selectedNumber, error, loading, serverResponse,
+        handlePress, deleteLastNumber, resendOtpHandler } = useVerifyOTP()
     const { sendOTPtoEmailAddress, isLoading } = useSendOTP();
 
     return (
@@ -17,7 +18,9 @@ export default function VerifyPhoneNumber() {
                     switchInstead="Switch to Email Address Instead." 
                     switchPath="verify-email-address"
                     clicked={sendOTPtoEmailAddress}
-                    contact="09055364280" resendOtpHandler={resendOtpHandler}
+                    contact="09055364280" 
+                    serverResponse={serverResponse}
+                    resendOtpHandler={resendOtpHandler}
                     selectedNumber={selectedNumber} error={error} 
                     loading={loading === true ? loading : isLoading}
                 />

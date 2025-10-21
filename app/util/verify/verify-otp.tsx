@@ -1,5 +1,5 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Platform } from "react-native";
 import Spinner from "react-native-loading-spinner-overlay";
 
 
@@ -11,12 +11,13 @@ interface VerifyOTPprops {
     switchPath: string,
     loading: boolean,
     contact: string,
+    serverResponse: string,
     clicked: () => void,
     resendOtpHandler: () => void
 }
 
 export default function VerifyOTP(
-    { titleMessage, switchInstead, contact, switchPath, clicked,
+    { titleMessage, switchInstead, contact, switchPath, clicked, serverResponse,
         selectedNumber, error, loading, resendOtpHandler }: VerifyOTPprops) {
     const message = `Didn't receive the OTP ?`
 
@@ -43,16 +44,19 @@ export default function VerifyOTP(
                 </View> 
                 <Spinner visible={loading} />
                 {error.length > 0 ? <Text style={style.errorText}>{error}</Text> : null}
+                {serverResponse.length > 0 ? <Text style={{}}>{serverResponse}</Text>: null}
                 <View style={[ style.keyLogoWrapper, { marginTop: 20 } ]}>
                     <Text>{message}</Text>
                     <TouchableOpacity style={style.resendButton} >
-                        <Text style={{color: "#fff", fontWeight: "300"}} 
+                        <Text style={{color: "#fff", 
+                            fontWeight: Platform.OS === "ios" ? "300": "600"}} 
                             onPress={resendOtpHandler}>Resend</Text>
                     </TouchableOpacity>
                 </View>
                 <TouchableOpacity onPress={clicked}>
-                    <Text style={{color: "purple", marginTop: 50,
-                         paddingLeft: 10}}>{switchInstead}</Text>
+                    <Text style={{color: "purple", 
+                        marginTop: Platform.OS === "ios" ? 50 : 30,
+                        paddingLeft: 10}}>{switchInstead}</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

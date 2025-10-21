@@ -1,9 +1,10 @@
-import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Platform } from "react-native";
 import Spinner from "react-native-loading-spinner-overlay";
 
 
 interface ResetAppPasswordComponentProps {
     loading: boolean,
+    serverResponse: string,
     oldAppPasswordVisible: boolean,
     resetAppPasswordHandler: () => void,
     setOldAppPasswordHandler: (pin: string) => void,
@@ -12,7 +13,8 @@ interface ResetAppPasswordComponentProps {
 }
 
 export default function ResetAppPasswordComponent(
-    { oldAppPasswordVisible, loading, resetAppPasswordHandler,
+    { oldAppPasswordVisible, loading, 
+        resetAppPasswordHandler, serverResponse,
         setOldAppPasswordHandler, setNewAppPasswordHandler,
         setConfirmedAppPasswordHandler }: ResetAppPasswordComponentProps) {
             
@@ -20,6 +22,7 @@ export default function ResetAppPasswordComponent(
         <SafeAreaView>
             <Spinner visible={loading} />
             <View style={style.container}>
+                {serverResponse.length > 0 ? <Text style={{textAlign: "center"}}>{serverResponse}</Text>: null}
                 <View>
                     {oldAppPasswordVisible && <TextInput placeholder="old App Password" 
                         onChangeText={setOldAppPasswordHandler} 
@@ -60,11 +63,11 @@ const style = StyleSheet.create({
         width: 350,
         height: 50,
         paddingLeft: 10,
-        marginTop: 15,
-        marginBottom: 15,
+        marginTop: Platform.OS === "ios" ? 15 : -50, //
+        marginBottom: Platform.OS === "ios" ? 15 : 0, //
         borderRadius: 8,
         shadowOpacity: 0.1,
-        backgroundColor: "#fff"
+        backgroundColor: Platform.OS === "ios" ? "#fff" : "grey"
     },
     resetPasswordStyle: {
         width: 350,

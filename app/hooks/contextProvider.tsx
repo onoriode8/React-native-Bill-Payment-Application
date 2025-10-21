@@ -25,6 +25,7 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
 
     const [userData, setUserData] = useState({
         token: "", email: "", userId: "", fullname: "", 
+        phoneNumber: 0, isMFA: false,
         totalBalance: 0.00, isPaymentPinSet: false
     })
     const [loading, setLoading] = useState<boolean>(false)
@@ -32,12 +33,12 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
     const [backgroundColor, setBackgroundColor] = useState(false)
 
     useEffect(() => {
-        const extractedPinPaymentValue = async() => {
+        const extractedUserDataValue = async() => {
             const data = await AsyncStorage.getItem("userData");
             const parsed = JSON.parse(data);
             console.log("RETRIEVED", parsed);
         }
-        extractedPinPaymentValue()
+        extractedUserDataValue()
     }, [])
 
     console.log(auth)
@@ -75,7 +76,9 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
                     fullname: res.data.fullname, 
                     token: res.data.token, 
                     email: res.data.email, 
+                    isMFA: res.data.isMFA,
                     userId: res.data.userId,
+                    phoneNumber: res.data.phoneNumber,
                     totalBalance: res.data.totalBalance,
                     isPaymentPinSet: res.data.isPaymentPinSet
                 })
@@ -112,9 +115,11 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
         <AuthContext.Provider value={{
             userPersonalData: {
                 email: userData.email,
+                isMFA: userData.isMFA,
                 token: userData.token,
                 userId: userData.userId,
                 fullname: userData.fullname,
+                phoneNumber: userData.phoneNumber,
                 totalBalance: userData.totalBalance,
                 isPaymentPinSet: userData.isPaymentPinSet
             },

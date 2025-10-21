@@ -40,6 +40,7 @@ export const useEnterPaymentPin = () => {
         const verifyPinHandler = async () => {
             try {
                 const selectedNumber = parsedExtractedPinToNumber
+                // /user/verify/payment/pin/userId route added to backend successfully.
                 const response = await axios.post(`${PROD_API_URL}/user/verify/payment/pin/${userPersonalData.userId}`, { //this path or url already connected to backend and it passed.
                     selectedNumber
                 }, {
@@ -86,6 +87,8 @@ export const useVerifyOTP = () => {
     const [loading, setLoading] = useState<boolean>(false)
     const [selectedNumber, setSelectedNumber] = useState<number[]>([])
 
+    const [serverResponse, setServerResponse] = useState<string>("");
+
     const { userPersonalData, path } = useContext(Context);
 
     const navigation = useNavigation<any>();
@@ -98,20 +101,30 @@ export const useVerifyOTP = () => {
     }
 
     const deleteLastNumber = () => {
-        setSelectedNumber(prevState => prevState.slice(0, -1))
+        setSelectedNumber(prevState => prevState.slice(0, -1));
     }
 
     const resendOtpHandler = async () => {
+        console.log("CLICKED ON RESEND BUTTON")
         try {
             setLoading(true)
-            const response = await axios.get(`${PROD_API_URL}/user/resend/otp/${userPersonalData.userId}`, {
+            // /user/resend/otp/userId route added to backend successfully. not added yet
+            const response = await axios.post(`${PROD_API_URL}/user/resend/otp/${userPersonalData.userId}`, {
+                to: userPersonalData.phoneNumber || userPersonalData.email, //select only one either to email or phonenumber to send to server.
+                email: userPersonalData.email
+            }, {
                 headers: {
-                    "Authorization": "Bearer " + userPersonalData.userId
+                    "Authorization": "Bearer " + userPersonalData.token
                 }
             })
             setLoading(false)
             console.log("DATA", response.data);
+            setServerResponse(response.data)
+            setTimeout(() => {
+                setServerResponse("");
+            }, 3000)
         } catch (error) {
+            setLoading(false)
             const errorMessage = error.message || "Something went wrong"
             setError(errorMessage)
             setTimeout(() => {
@@ -124,11 +137,14 @@ export const useVerifyOTP = () => {
         if(selectedNumber.length !== 6) return
         //console.log("PATH SAVED", path)
         //navigation.navigate(path) //"forgot-pin"
+        const convertedToString = selectedNumber.join("")
+        const formattedToNumber = Number(convertedToString)
         const verifyOTPHandler = async () => {
             try {
                 setLoading(true)
                 const response = await axios.post(`${PROD_API_URL}/user/verify/identity/otp/${userPersonalData.userId}`, {
-                    selectedNumber
+                    formattedToNumber,
+                    email: userPersonalData.email
                 }, {
                     headers: {
                         "Authorization": "Bearer " + userPersonalData.token
@@ -150,6 +166,6 @@ export const useVerifyOTP = () => {
     }, [selectedNumber]);
 
 
-    return { selectedNumber, error, loading, 
+    return { selectedNumber, error, loading, serverResponse,
         handlePress, deleteLastNumber, resendOtpHandler }
 }

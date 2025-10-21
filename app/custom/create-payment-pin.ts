@@ -1,6 +1,6 @@
-import { useState, useContext, useEffect } from 'react'
-import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import axios from 'axios'
+import { useContext, useEffect, useState } from 'react'
 
 import { PROD_API_URL } from '../config'
 import AuthContext from '../hooks/context'
@@ -46,7 +46,8 @@ export const useCreatePaymentPin = () => {
             setLoading(true)
             const newPaymentPin = parsedExtractedPinToNumber //this path or url below already connected to backend and it passed.
             const response = await axios.patch(`${PROD_API_URL}/user/create/new/payment/pin/${userPersonalData.userId}`, {
-                newPaymentPin
+                newPaymentPin,
+                email: userPersonalData.email
             }, {
                 headers: {
                     "Authorization":"Bearer " + userPersonalData.token

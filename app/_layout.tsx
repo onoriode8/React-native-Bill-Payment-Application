@@ -1,5 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Platform } from "react-native";
 import { useContext } from 'react';
 
 import AddMoney from './AppScreen/addMoney/add-money';
@@ -9,7 +10,10 @@ import SupportAgent from './AppScreen/contact/support-agent';
 import DashBoard from './AppScreen/dashboard/dashboard';
 import Notification from './AppScreen/notification/notification';
 import ProfileScreen from './AppScreen/profile/profileScreen';
+import ChangeAppPassword from "./AppScreen/reset-pin/change-app-password";
 import ChangePin from "./AppScreen/reset-pin/change-pin";
+import createPaymentPin from './AppScreen/reset-pin/create-payment-pin';
+import ForgotAppPassword from "./AppScreen/reset-pin/forgot-app-password";
 import ForgotPin from "./AppScreen/reset-pin/forgot-pin";
 import Airtime from './AppScreen/services/airtime';
 import History from './AppScreen/tabscreen/history';
@@ -22,9 +26,7 @@ import VerifyPinOverLay from './util/overlay/verify-pin-overlay';
 import VerifyEmailAddress from './util/verify-identity/verify-email-address';
 import VerifyPhoneNumber from './util/verify-identity/verify-phone-number';
 import VerifyEmailWithCode from './util/verify/verifyEmail';
-import createPaymentPin from './AppScreen/reset-pin/create-payment-pin'
-import ChangeAppPassword from "./AppScreen/reset-pin/change-app-password"
-import ForgotAppPassword from "./AppScreen/reset-pin/forgot-app-password"
+import TwoFactorAuthenticator from "./AppScreen/security/2fa-auth";
 
 
 const Tab = createBottomTabNavigator()
@@ -36,9 +38,11 @@ function TabsRootLayout() {
   return (
       <Tab.Navigator initialRouteName='dashboard' 
         screenOptions={{ }}>
-        <Tab.Screen name="dashboard" component={DashBoard} options={{ title: "Home",
-          headerStyle: { backgroundColor: "purple"}, headerTitle: "Home", 
-          headerTintColor: "purple" }}/>
+        <Tab.Screen name="dashboard" component={DashBoard} options={{ 
+          title: Platform.OS === "ios" ? "Home" : "Dashboard",
+          headerStyle: { 
+            backgroundColor: Platform.OS === "ios" ? "purple" : "#fff"}, 
+          headerTitle: Platform.OS === "ios" ? "Home" : "Dashboard", headerTintColor: "purple" }}/>
         <Tab.Screen name="reward" component={Reward} options={{ title: "Reward", 
           headerStyle: { backgroundColor: "purple" }, headerTintColor: "#fff",
           headerTitleStyle: { fontWeight: "bold" } }}/>
@@ -119,6 +123,9 @@ export default function RootLayout() {
           options={{ title: "Change App Password", headerStyle: { backgroundColor: "purple" }, 
           headerTintColor: "#fff", headerTitleStyle: { fontWeight: "bold" }, headerBackTitle: "C",
           headerBackTitleStyle: { fontSize: 1 } }} />
+        <Stack.Screen name="two-factor-auth" component={TwoFactorAuthenticator} 
+          options={{ title: "Set 2FA", headerStyle: { backgroundColor: "purple" },
+          headerTintColor: "#fff", headerTitleStyle: { fontWeight: "bold"} }} />
       </Stack.Navigator>
     </ContextProvider>
   );

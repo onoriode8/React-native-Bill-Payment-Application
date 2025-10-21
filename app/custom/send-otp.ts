@@ -1,6 +1,6 @@
-import axios from "axios";
-import { useState, useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import { useContext, useState } from "react";
 
 import { PROD_API_URL } from "../config";
 import AuthContext from "../hooks/context";
@@ -16,11 +16,17 @@ export const useSendOTP = () => {
 
     //send otp code to phone number.
     const sendOTPtoPhoneNumber = async() => {
+        console.log("CLICKED ON SEND OTP PHONE")
+
         setIsLoading(true)
         dispatchPath("forgot-pin") //dispatch path
         navigation.navigate("verify-phone-number")
-        try {
-            const response = await axios.get(`${PROD_API_URL}/user/send/otp/phone/${userPersonalData.userId}`, {
+        try { //this path or url below already connected to backend and it passed. 
+            // Waiting for twilio third party app for sending otp to phone number.
+            const response = await axios.post(`${PROD_API_URL}/user/send/otp/phone/${userPersonalData.userId}`, {
+                to: userPersonalData.phoneNumber, //should be sending a number as the userPersonalData.phoneNumber to server.
+                email: userPersonalData.email
+            }, {
                 headers: {
                     "Authorization":"Bearer " + userPersonalData.token
                 }
@@ -39,10 +45,14 @@ export const useSendOTP = () => {
 
     //send otp code to email address.
     const sendOTPtoEmailAddress = async() => {
+        console.log("CLICKED ON SEND OTP EMAIL")
+
         setIsLoading(true)
         navigation.navigate("verify-email-address")
-        try {
-            const response = await axios.get(`${PROD_API_URL}/user/send/otp/email/${userPersonalData.userId}`, {
+        try { // /user/send/otp/email/:userid route added to backend successfully.
+            const response = await axios.post(`${PROD_API_URL}/user/send/otp/email/${userPersonalData.userId}`, {
+                email: userPersonalData.email
+            }, {
                 headers: {
                     "Authorization":"Bearer " + userPersonalData.token
                 }

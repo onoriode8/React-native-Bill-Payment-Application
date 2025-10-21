@@ -53,9 +53,10 @@ export const useResetPin = () => {
             const formattedNewPaymentPin = Number(newPaymentPin)
             const formattedConfirmedPaymentPin = Number(confirmedPaymentPin);
             let response;
-            if(isFocused === true) {
+            if(isFocused === true) { // /user/change/payment/pin route added to backend successfully.
                 response = await axios.patch(`${PROD_API_URL}/user/change/payment/pin/${userPersonalData.userId}`, {
-                    formattedOldPaymentPin, formattedNewPaymentPin, formattedConfirmedPaymentPin
+                    formattedOldPaymentPin, formattedNewPaymentPin, formattedConfirmedPaymentPin,
+                    email: userPersonalData.email
                 }, {
                     headers: {
                         "Authorization": "Bearer " + userPersonalData.token
@@ -63,7 +64,8 @@ export const useResetPin = () => {
                 })
             } else if(isFocused === false) { // /user/reset/payment/pin route added to backend successfully.
                 response = await axios.patch(`${PROD_API_URL}/user/reset/payment/pin/${userPersonalData.userId}`, {
-                    formattedNewPaymentPin, formattedConfirmedPaymentPin
+                    formattedNewPaymentPin, formattedConfirmedPaymentPin,
+                    email: userPersonalData.email
                 }, {
                     headers: {
                         "Authorization": "Bearer " + userPersonalData.token

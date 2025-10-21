@@ -5,14 +5,16 @@ import ResetAppPasswordComponent from "../../util/reset-data/change-password"
 
 
 export default function ForgotAppPassword() {
-    const { setOldAppPasswordHandler, setNewAppPasswordHandler, loading,
-        setConfirmedAppPasswordHandler, resetForgotAppPasswordHandler } = useChangeAppPassword();
+    const { setOldAppPasswordHandler, setNewAppPasswordHandler, 
+        loading, serverResponse, setConfirmedAppPasswordHandler, 
+        resetForgotAppPasswordHandler } = useChangeAppPassword();
 
     return (
         <SafeAreaView>
             <View>
                 <ResetAppPasswordComponent resetAppPasswordHandler={resetForgotAppPasswordHandler}
                     oldAppPasswordVisible={false} loading={loading} 
+                    serverResponse={serverResponse}
                     setOldAppPasswordHandler={setOldAppPasswordHandler}
                     setNewAppPasswordHandler={setNewAppPasswordHandler}
                     setConfirmedAppPasswordHandler={setConfirmedAppPasswordHandler}

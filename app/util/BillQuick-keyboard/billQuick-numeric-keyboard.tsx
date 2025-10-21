@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Platform } from "react-native";
 
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
@@ -57,7 +57,7 @@ export default function BillQuickNumericKeyBoard(
 
 const style = StyleSheet.create({
     numericKeyboardWrapper: {
-        marginTop: 40,
+        marginTop: Platform.OS === "ios" ? 40 : 35,
     },
     numberButtonWrapper: {
         flexWrap: "wrap",

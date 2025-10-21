@@ -1,27 +1,28 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
-import Spinner from 'react-native-loading-spinner-overlay';
 import { useContext, useState } from 'react';
 import { SafeAreaView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
+import Spinner from 'react-native-loading-spinner-overlay';
 
-import Context from '../../hooks/context';
 import { useSendOTP } from '../../custom/send-otp';
+import useTwoFactorAuthenticator from '../../custom/two-factor-authenticator';
+import Context from '../../hooks/context';
 
 
 export default function Settings() {
     const [LoginWithFaceId, setLoginWithFaceId] = useState<boolean>(false)
     const [enableBiometric, setEnableBiometric] = useState<boolean>(false)
-    const [enable2FA, setEnable2FA] = useState<boolean>(false)
 
     const { userPersonalData } = useContext(Context) //get isMFA value if set up or not, like true or false from server.
     const navigation = useNavigation<any>()
 
     const { sendOTPtoPhoneNumber, error, isLoading, dispatchPathToForgotAppPasswordHandler,
         dispatchPathHandler, dispatchPathToChangeAppPasswordHandler } = useSendOTP()
+    const { isMFAenabled, loading, setTwoFactorAuthHandler } = useTwoFactorAuthenticator()
 
     return (
         <SafeAreaView>
-            <Spinner visible={isLoading} />
+            <Spinner visible={isLoading ? isLoading : loading} />
             <View style={style.container}>
                 <TouchableOpacity style={style.wrapper} 
                     onPress={userPersonalData.isPaymentPinSet ? () => navigation.navigate("verify-pin") 
@@ -60,8 +61,8 @@ export default function Settings() {
                 </TouchableOpacity>
                 <TouchableOpacity style={style.wrapper}>
                     <Text style={style.textStyle}>Two Factor Authentication (2FA) </Text>
-                    <Switch value={enable2FA} 
-                        onValueChange={() => setEnable2FA(true)} /> {/* boolean will becoming from server */}
+                    <Switch value={isMFAenabled} 
+                        onValueChange={() => setTwoFactorAuthHandler()} /> 
                 </TouchableOpacity>
                 <TouchableOpacity style={[style.wrapper, { marginBottom: 30 }]} onPress={() => navigation.navigate()}>
                     <Text style={style.textStyle}>Security Questions</Text>
